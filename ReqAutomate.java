@@ -25,7 +25,7 @@ import java.util.*;
  *                                           <img class="have-owned" alt="Beam Rifle" src="https://image.halocdn.com/h5/requisitions/e1047da5-2880-4071-8e8d-9fecd5cb4f3d?locale=en&amp;width=200&amp;hash=dc2Rt16Lx%2bWaWxZ4sAfwyU5s1uDExOq1vDNIFuVFeMI%3d">
  *                                       </button> 
  * Description: Opens up the Chrome web browser, goes to Halo Waypoint, logs you in, pulls Requisition API data from XPath.
- * Warning: I did get a little carried away with the hard-coded arrays. I may remove them in a future update.
+ * Warning: I did get a little carried away with the hard-coded arrays, which are now located in the XPathArray Class. I may remove them in a future update.
  * Future Plans: Dynamically generate the XPath strings by subtracting the remainder of (n-values % 6) from n-values and inserting the data in that many rows (with the remainder being the last row).
  * Additional Info: This software uses references to the Selenium WebDriver, Halo 5: Guardians, and HaloWaypoint.
  * For more info please visit: http://www.seleniumhq.org/ or http://www.halowaypoint.com
@@ -98,9 +98,10 @@ public class ReqAutomate {
 	List<WebElement> findEl;
 	Date date;
 	ArrayList <String> ReqIDs;
+	XPathArray xpa;
     public static void main(String[] args) {
     	ReqAutomate ra = new ReqAutomate();
-
+    	 
     	ra.automationMethod();
     	System.out.println("Number of entries = "+ ra.ReqIDs.size());
     	System.out.println("The program has ended");
@@ -110,8 +111,8 @@ public class ReqAutomate {
     
     public void automationMethod(){
     	
-    	System.setProperty("webdriver.chrome.driver", "Wherever_You_Have_It_Saved/chromedriver.exe");
-    	
+    	System.setProperty("webdriver.chrome.driver", "Where_Did_You_Save/chromedriver.exe");
+    	xpa = new XPathArray();
     	DesiredCapabilities capabilities = DesiredCapabilities.chrome();
     	ChromeOptions options = new ChromeOptions();
     	options.addArguments("-incognito");
@@ -124,186 +125,31 @@ public class ReqAutomate {
     	searchBox.click();
     	//MS
     	searchBox2 = driver.findElement(By.name("loginfmt"));
-    	searchBox2.sendKeys("What is your email?");
+    	searchBox2.sendKeys("Email?");
     	//MS
     	searchBox3 = driver.findElement(By.id("i0118"));
-    	searchBox3.sendKeys("What is your password?");
+    	searchBox3.sendKeys("Password?");
     	searchBox3.submit();
     	date = new Date();
+    	//Output begins here
     	System.out.println(date.toString());
     	
-    	String powerWeapons [] = {
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[1]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[1]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[1]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[1]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[1]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[1]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[2]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[2]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[2]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[2]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[2]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[2]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[3]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[3]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[3]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[3]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[3]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[3]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[4]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[4]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[4]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[4]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[4]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[4]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[5]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[5]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[5]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[5]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[5]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[5]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[6]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[6]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[6]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[6]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[6]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[6]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[7]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[7]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[7]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[7]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[7]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[7]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[8]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[8]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[8]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[8]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[8]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[8]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[9]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[9]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[9]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[9]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[9]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[9]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[10]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[10]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[10]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[10]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[10]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[10]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[11]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[11]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[11]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[11]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[11]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[11]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[12]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[12]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[12]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[12]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[12]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[12]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[13]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[13]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[13]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[13]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[13]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[13]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[14]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[14]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[14]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[14]/div/div/div[4]/div/button",};
-    	String vehicles [] = {
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[1]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[1]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[1]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[1]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[1]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[1]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[2]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[2]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[2]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[2]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[2]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[2]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[3]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[3]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[3]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[3]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[3]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[3]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[4]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[4]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[4]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[4]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[4]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[4]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[5]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[5]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[5]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[5]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[5]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[5]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[6]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[6]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[6]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[6]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[6]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[6]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[7]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[7]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[7]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[7]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[7]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[7]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[8]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[8]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[8]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[8]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[8]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[8]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[9]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[9]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[9]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[9]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[9]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[9]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[10]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[10]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[10]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[10]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[10]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[10]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[11]/div/div/div[1]/div/button"};
-    	String powerups [] ={
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[1]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[1]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[1]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[1]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[1]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[1]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[2]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[2]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[2]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[2]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[2]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[2]/div/div/div[6]/div/button",};
-    	
     	System.out.println("Power Weapons");
-    	for (int i = 0; i < powerWeapons.length; i++){
+    	
+    	for (int i = 0; i < xpa.powerWeapons.length; i++){
     		
-    		cardData = driver.findElement(By.xpath(powerWeapons[i]));
+    		cardData = driver.findElement(By.xpath(xpa.powerWeapons[i]));
     	
     	//http://stackoverflow.com/questions/7852287/using-selenium-web-driver-to-retrieve-value-of-a-html-input
     		//cardData.getAttribute("data-id");
     		ReqIDs.add(cardData.getAttribute("data-id"));
     		System.out.println("\""+cardData.getAttribute("data-id")+"\",");
     	}
+    	
     	System.out.println("Vehicles");
-    	for (int j = 0; j < vehicles.length; j++){
-    		cardData = driver.findElement(By.xpath(vehicles[j]));
+    	
+    	for (int j = 0; j < xpa.vehicles.length; j++){
+    		cardData = driver.findElement(By.xpath(xpa.vehicles[j]));
     		//cardData.getAttribute("data-id");
     		ReqIDs.add(cardData.getAttribute("data-id"));
     		System.out.println("\""+cardData.getAttribute("data-id")+"\",");
@@ -311,1140 +157,157 @@ public class ReqAutomate {
     	//driver.get("");
     	//<div class ="card"><button data-id="retrieve this value">
     	System.out.println("Powerups");
-    	for (int k = 0; k < powerups.length; k++){
-    		cardData = driver.findElement(By.xpath(powerups[k]));
+    	
+    	for (int k = 0; k < xpa.powerups.length; k++){
+    		cardData = driver.findElement(By.xpath(xpa.powerups[k]));
     		//cardData.getAttribute("data-id");
     		ReqIDs.add(cardData.getAttribute("data-id"));
     		System.out.println("\""+cardData.getAttribute("data-id")+"\",");
     	}
+    	
+    	//Customization
     	driver.get("https://www.halowaypoint.com/en-us/games/halo-5-guardians/xbox-one/requisitions/categories/customization?ownedOnly=False");
     	System.out.println("Helmets");
-    	String helmets [] = {
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[1]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[1]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[1]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[1]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[1]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[1]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[2]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[2]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[2]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[2]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[2]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[2]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[3]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[3]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[3]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[3]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[3]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[3]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[4]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[4]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[4]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[4]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[4]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[4]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[5]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[5]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[5]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[5]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[5]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[5]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[6]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[6]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[6]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[6]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[6]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[6]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[7]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[7]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[7]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[7]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[7]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[7]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[8]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[8]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[8]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[8]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[8]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[8]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[9]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[9]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[9]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[9]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[9]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[9]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[10]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[10]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[10]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[10]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[10]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[10]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[11]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[11]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[11]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[11]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[11]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[11]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[12]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[12]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[12]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[12]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[12]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[12]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[13]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[13]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[13]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[13]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[13]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[13]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[14]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[14]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[14]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[14]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[14]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[14]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[15]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[15]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[15]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[15]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[15]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[15]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[16]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[16]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[16]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[16]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[16]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[16]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[17]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[17]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[17]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[17]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[17]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[17]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[18]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[18]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[18]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[18]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[18]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[18]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[19]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[19]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[19]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[19]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[19]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[19]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[20]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[20]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[20]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[20]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[20]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[20]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[21]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[21]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[21]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[21]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[21]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[21]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[22]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[22]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[22]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[22]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[22]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[22]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[23]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[23]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[23]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[23]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[23]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[23]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[24]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[24]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[24]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[24]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[24]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[24]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[25]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[25]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[25]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[25]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[25]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[25]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[26]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[26]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[26]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[26]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[26]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[26]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[27]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[27]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[27]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[27]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[27]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[27]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[28]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[28]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[28]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[28]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[28]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[28]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[29]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[29]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[29]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[29]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[29]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[29]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[30]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[30]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[30]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[30]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[30]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[30]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[31]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[31]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[31]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[31]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[31]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[31]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[32]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[32]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[32]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[32]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[32]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[32]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[33]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[33]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[33]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[33]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[33]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[33]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[34]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[34]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[34]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[34]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[34]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[34]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[35]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[35]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[35]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[35]/div/div/div[4]/div/button",};
     
-    	for (int k = 0; k < helmets.length; k++){
-    		cardData = driver.findElement(By.xpath(helmets[k]));
+    	for (int k = 0; k < xpa.helmets.length; k++){
+    		cardData = driver.findElement(By.xpath(xpa.helmets[k]));
     		//cardData.getAttribute("data-id");
     		ReqIDs.add(cardData.getAttribute("data-id"));
     		System.out.println("\""+cardData.getAttribute("data-id")+"\",");
     	}
-    	////*[@id="main"]/div[3]/div[2]/div/div/div[1]/div/div/div[1]/div/button
+    	
     	System.out.println("Armor");
-    	String armor [] = {
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[1]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[1]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[1]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[1]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[1]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[1]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[2]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[2]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[2]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[2]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[2]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[2]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[3]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[3]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[3]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[3]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[3]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[3]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[4]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[4]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[4]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[4]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[4]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[4]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[5]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[5]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[5]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[5]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[5]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[5]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[6]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[6]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[6]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[6]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[6]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[6]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[7]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[7]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[7]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[7]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[7]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[7]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[8]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[8]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[8]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[8]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[8]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[8]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[9]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[9]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[9]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[9]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[9]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[9]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[10]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[10]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[10]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[10]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[10]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[10]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[11]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[11]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[11]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[11]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[11]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[11]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[12]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[12]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[12]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[12]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[12]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[12]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[13]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[13]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[13]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[13]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[13]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[13]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[14]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[14]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[14]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[14]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[14]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[14]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[15]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[15]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[15]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[15]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[15]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[15]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[16]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[16]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[16]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[16]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[16]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[16]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[17]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[17]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[17]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[17]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[17]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[17]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[18]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[18]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[18]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[18]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[18]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[18]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[19]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[19]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[19]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[19]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[19]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[19]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[20]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[20]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[20]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[20]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[20]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[20]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[21]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[21]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[21]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[21]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[21]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[21]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[22]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[22]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[22]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[22]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[22]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[22]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[23]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[23]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[23]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[23]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[23]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[23]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[24]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[24]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[24]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[24]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[24]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[24]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[25]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[25]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[25]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[25]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[25]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[25]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[26]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[26]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[26]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[26]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[26]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[26]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[27]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[27]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[27]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[27]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[27]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[27]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[28]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[28]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[28]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[28]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[28]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[28]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[29]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[29]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[29]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[29]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[29]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[29]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[30]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[30]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[30]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[30]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[30]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[30]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[31]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[31]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[31]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[31]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[31]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[31]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[32]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[32]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[32]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[32]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[32]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[32]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[33]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[33]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[33]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[33]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[33]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[33]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[34]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[34]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[34]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[34]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[34]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[34]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[35]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[35]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[35]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[35]/div/div/div[4]/div/button",
-    			
-    			};
-    	for (int k = 0; k < armor.length; k++){
-    		cardData = driver.findElement(By.xpath(armor[k]));
+    	
+    	for (int k = 0; k < xpa.armor.length; k++){
+    		cardData = driver.findElement(By.xpath(xpa.armor[k]));
     		//cardData.getAttribute("data-id");
     		ReqIDs.add(cardData.getAttribute("data-id"));
     		System.out.println("\""+cardData.getAttribute("data-id")+"\",");
     	}
+    	
     	System.out.println("Visors");
-    	String visors [] = {
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[1]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[1]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[1]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[1]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[1]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[1]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[2]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[2]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[2]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[2]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[2]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[2]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[3]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[3]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[3]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[3]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[3]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[3]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[4]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[4]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[4]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[4]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[4]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[4]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[5]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[5]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[5]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[5]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[5]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[5]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[6]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[6]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[6]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[6]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[6]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[6]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[7]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[7]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[7]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[7]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[7]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[7]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[8]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[8]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[8]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[8]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[8]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[8]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[9]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[9]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[9]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[9]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[9]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[9]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[10]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[10]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[10]/div/div/div[3]/div/button",
-    			
-    	};
-    	for (int k = 0; k < visors.length; k++){
-    		cardData = driver.findElement(By.xpath(visors[k]));
+    	
+    	for (int k = 0; k < xpa.visors.length; k++){
+    		cardData = driver.findElement(By.xpath(xpa.visors[k]));
     		//cardData.getAttribute("data-id");
     		ReqIDs.add(cardData.getAttribute("data-id"));
     		System.out.println("\""+cardData.getAttribute("data-id")+"\",");
     	}
+    	
     	System.out.println("Emblems");
-    	String emblems [] = {
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[1]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[1]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[1]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[1]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[1]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[1]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[2]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[2]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[2]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[2]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[2]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[2]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[3]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[3]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[3]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[3]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[3]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[3]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[4]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[4]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[4]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[4]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[4]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[4]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[5]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[5]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[5]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[5]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[5]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[5]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[6]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[6]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[6]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[6]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[6]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[6]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[7]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[7]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[7]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[7]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[7]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[7]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[8]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[8]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[8]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[8]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[8]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[8]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[9]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[9]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[9]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[9]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[9]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[9]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[10]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[10]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[10]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[10]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[10]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[10]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[11]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[11]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[11]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[11]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[11]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[11]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[12]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[12]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[12]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[12]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[12]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[12]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[13]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[13]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[13]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[13]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[13]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[13]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[14]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[14]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[14]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[14]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[14]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[14]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[15]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[15]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[15]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[15]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[15]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[15]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[16]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[16]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[16]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[16]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[16]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[16]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[17]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[17]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[17]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[17]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[17]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[17]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[18]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[18]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[18]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[18]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[18]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[18]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[19]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[19]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[19]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[19]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[19]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[19]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[20]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[20]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[20]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[20]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[20]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[20]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[21]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[21]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[21]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[21]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[21]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[21]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[22]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[22]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[22]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[22]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[22]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[22]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[23]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[23]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[23]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[23]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[23]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[23]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[24]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[24]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[24]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[24]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[24]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[24]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[25]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[25]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[25]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[25]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[25]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[25]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[26]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[26]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[26]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[26]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[26]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[26]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[27]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[27]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[27]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[27]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[27]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[27]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[28]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[28]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[28]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[28]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[28]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[28]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[29]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[29]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[29]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[29]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[29]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[29]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[30]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[30]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[30]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[30]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[30]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[30]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[31]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[31]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[31]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[31]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[31]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[31]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[32]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[32]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[32]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[32]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[32]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[32]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[33]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[33]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[33]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[33]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[33]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[33]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[34]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[34]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[34]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[34]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[34]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[34]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[35]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[35]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[35]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[35]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[35]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[35]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[36]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[36]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[36]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[36]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[36]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[36]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[37]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[37]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[37]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[37]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[37]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[37]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[38]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[38]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[38]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[38]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[38]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[38]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[39]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[39]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[39]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[39]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[39]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[39]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[40]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[40]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[40]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[40]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[40]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[40]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[41]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[41]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[41]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[41]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[41]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[41]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[42]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[42]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[42]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[42]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[42]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[42]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[43]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[43]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[43]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[43]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[43]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[43]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[44]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[44]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[44]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[44]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[44]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[44]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[45]/div/div/div[1]/div/button",
-    			
-    			////*[@id="main"]/div[3]/div[4]/div/div/div[45]/div/div/div/div/button
-    			};
-    	for (int k = 0; k < emblems.length; k++){
-    		cardData = driver.findElement(By.xpath(emblems[k]));
+    	
+    	for (int k = 0; k < xpa.emblems.length; k++){
+    		cardData = driver.findElement(By.xpath(xpa.emblems[k]));
     		//cardData.getAttribute("data-id");
     		ReqIDs.add(cardData.getAttribute("data-id"));
     		System.out.println("\""+cardData.getAttribute("data-id")+"\",");
     	}
+    	
     	System.out.println("Stance");
-    	String stances [] = {
-    			"//*[@id='main']/div[3]/div[5]/div/div/div[1]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[5]/div/div/div[1]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[5]/div/div/div[1]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[5]/div/div/div[1]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[5]/div/div/div[1]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[5]/div/div/div[1]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[5]/div/div/div[2]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[5]/div/div/div[2]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[5]/div/div/div[2]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[5]/div/div/div[2]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[5]/div/div/div[2]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[5]/div/div/div[2]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[5]/div/div/div[3]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[5]/div/div/div[3]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[5]/div/div/div[3]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[5]/div/div/div[3]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[5]/div/div/div[3]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[5]/div/div/div[3]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[5]/div/div/div[4]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[5]/div/div/div[4]/div/div/div[2]/div/button",
-    			
-    	};
-    	for (int k = 0; k < stances.length; k++){
-    		cardData = driver.findElement(By.xpath(stances[k]));
+    	
+    	for (int k = 0; k < xpa.stances.length; k++){
+    		cardData = driver.findElement(By.xpath(xpa.stances[k]));
     		//cardData.getAttribute("data-id");
     		ReqIDs.add(cardData.getAttribute("data-id"));
     		System.out.println("\""+cardData.getAttribute("data-id")+"\",");
     	}
+    	
     	System.out.println("Assassination");
-    	String assassinations [] = {
-    			"//*[@id='main']/div[3]/div[6]/div/div/div[1]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[6]/div/div/div[1]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[6]/div/div/div[1]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[6]/div/div/div[1]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[6]/div/div/div[1]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[6]/div/div/div[1]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[6]/div/div/div[2]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[6]/div/div/div[2]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[6]/div/div/div[2]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[6]/div/div/div[2]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[6]/div/div/div[2]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[6]/div/div/div[2]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[6]/div/div/div[3]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[6]/div/div/div[3]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[6]/div/div/div[3]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[6]/div/div/div[3]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[6]/div/div/div[3]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[6]/div/div/div[3]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[6]/div/div/div[4]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[6]/div/div/div[4]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[6]/div/div/div[4]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[6]/div/div/div[4]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[6]/div/div/div[4]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[6]/div/div/div[4]/div/div/div[6]/div/button",};
-    	for (int k = 0; k < assassinations.length; k++){
-    		cardData = driver.findElement(By.xpath(assassinations[k]));
+    	
+    	for (int k = 0; k < xpa.assassinations.length; k++){
+    		cardData = driver.findElement(By.xpath(xpa.assassinations[k]));
     		//cardData.getAttribute("data-id");
     		ReqIDs.add(cardData.getAttribute("data-id"));
     		System.out.println("\""+cardData.getAttribute("data-id")+"\",");
     	}
+    	
     	System.out.println("Weapon Skin");
-    	String weaponSkins [] = {
-    			"//*[@id='main']/div[3]/div[7]/div/div/div[1]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[7]/div/div/div[1]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[7]/div/div/div[1]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[7]/div/div/div[1]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[7]/div/div/div[1]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[7]/div/div/div[1]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[7]/div/div/div[2]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[7]/div/div/div[2]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[7]/div/div/div[2]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[7]/div/div/div[2]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[7]/div/div/div[2]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[7]/div/div/div[2]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[7]/div/div/div[3]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[7]/div/div/div[3]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[7]/div/div/div[3]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[7]/div/div/div[3]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[7]/div/div/div[3]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[7]/div/div/div[3]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[7]/div/div/div[4]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[7]/div/div/div[4]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[7]/div/div/div[4]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[7]/div/div/div[4]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[7]/div/div/div[4]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[7]/div/div/div[4]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[7]/div/div/div[5]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[7]/div/div/div[5]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[7]/div/div/div[5]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[7]/div/div/div[5]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[7]/div/div/div[5]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[7]/div/div/div[5]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[7]/div/div/div[6]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[7]/div/div/div[6]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[7]/div/div/div[6]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[7]/div/div/div[6]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[7]/div/div/div[6]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[7]/div/div/div[6]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[7]/div/div/div[7]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[7]/div/div/div[7]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[7]/div/div/div[7]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[7]/div/div/div[7]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[7]/div/div/div[7]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[7]/div/div/div[7]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[7]/div/div/div[8]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[7]/div/div/div[8]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[7]/div/div/div[8]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[7]/div/div/div[8]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[7]/div/div/div[8]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[7]/div/div/div[8]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[7]/div/div/div[9]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[7]/div/div/div[9]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[7]/div/div/div[9]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[7]/div/div/div[9]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[7]/div/div/div[9]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[7]/div/div/div[9]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[7]/div/div/div[10]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[7]/div/div/div[10]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[7]/div/div/div[10]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[7]/div/div/div[10]/div/div/div[4]/div/button",};
-    	for (int k = 0; k < weaponSkins.length; k++){
-    		cardData = driver.findElement(By.xpath(weaponSkins[k]));
+    	
+    	for (int k = 0; k < xpa.weaponSkins.length; k++){
+    		cardData = driver.findElement(By.xpath(xpa.weaponSkins[k]));
     		//cardData.getAttribute("data-id");
     		ReqIDs.add(cardData.getAttribute("data-id"));
     		System.out.println("\""+cardData.getAttribute("data-id")+"\",");
     	}
     	//LoadOut
     	driver.get("https://www.halowaypoint.com/en-us/games/halo-5-guardians/xbox-one/requisitions/categories/loadout?ownedOnly=False");
-    	//*[@id="main"]/div[3]/div[1]/div/div/div[4]/div/div/div[3]/div/button
+    	
     	System.out.println("Assault Rifles");
-    	String assaultRifles [] = {
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[1]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[1]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[1]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[1]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[1]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[1]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[2]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[2]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[2]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[2]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[2]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[2]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[3]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[3]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[3]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[3]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[3]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[3]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[4]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[4]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[4]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[4]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[4]/div/div/div[5]/div/button",};
-    	for (int k = 0; k < assaultRifles.length; k++){
-    		cardData = driver.findElement(By.xpath(assaultRifles[k]));
+    	
+    	for (int k = 0; k < xpa.assaultRifles.length; k++){
+    		cardData = driver.findElement(By.xpath(xpa.assaultRifles[k]));
     		//cardData.getAttribute("data-id");
     		ReqIDs.add(cardData.getAttribute("data-id"));
     		System.out.println("\""+cardData.getAttribute("data-id")+"\",");
     	}
-    	////*[@id="main"]/div[3]/div[2]/div/div/div[5]/div/div/div[4]/div/button
+    	
     	System.out.println("Battle Rifles");
-    	String battleRifles [] = {
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[1]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[1]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[1]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[1]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[1]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[1]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[2]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[2]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[2]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[2]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[2]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[2]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[3]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[3]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[3]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[3]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[3]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[3]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[4]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[4]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[4]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[4]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[4]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[4]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[5]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[5]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[5]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[5]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[5]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[5]/div/div/div[6]/div/button",};
-    	for (int k = 0; k < battleRifles.length; k++){
-    		cardData = driver.findElement(By.xpath(battleRifles[k]));
+    	
+    	for (int k = 0; k < xpa.battleRifles.length; k++){
+    		cardData = driver.findElement(By.xpath(xpa.battleRifles[k]));
     		//cardData.getAttribute("data-id");
     		ReqIDs.add(cardData.getAttribute("data-id"));
     		System.out.println("\""+cardData.getAttribute("data-id")+"\",");
     	}
-    	////*[@id="main"]/div[3]/div[3]/div/div/div[4]/div/div/div[3]/div/button
+    	
     	System.out.println("DMR");
-    	String dmrs [] = {
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[1]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[1]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[1]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[1]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[1]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[1]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[2]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[2]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[2]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[2]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[2]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[2]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[3]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[3]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[3]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[3]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[3]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[3]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[4]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[4]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[4]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[4]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[3]/div/div/div[4]/div/div/div[5]/div/button",};
-    	for (int k = 0; k < dmrs.length; k++){
-    		cardData = driver.findElement(By.xpath(dmrs[k]));
+    	
+    	for (int k = 0; k < xpa.dmrs.length; k++){
+    		cardData = driver.findElement(By.xpath(xpa.dmrs[k]));
     		//cardData.getAttribute("data-id");
     		ReqIDs.add(cardData.getAttribute("data-id"));
     		System.out.println("\""+cardData.getAttribute("data-id")+"\",");
     	}
-    	////*[@id="main"]/div[3]/div[4]/div/div/div/div/div/div/div/button
+    	
     	System.out.println("Halo 2 Battle Rifle");
-    	String h2br [] = {"//*[@id='main']/div[3]/div[4]/div/div/div/div/div/div/div/button"};
-    	for (int k = 0; k < h2br.length; k++){
-    		cardData = driver.findElement(By.xpath(h2br[k]));
+    	
+    	for (int k = 0; k < xpa.h2br.length; k++){
+    		cardData = driver.findElement(By.xpath(xpa.h2br[k]));
     		//cardData.getAttribute("data-id");
     		ReqIDs.add(cardData.getAttribute("data-id"));
     		System.out.println("\""+cardData.getAttribute("data-id")+"\",");
     	}
-    	////*[@id="main"]/div[3]/div[5]/div/div/div/div/div/div/div/button
+    	
     	System.out.println("Magnum");
-    	String magnum [] = {"//*[@id='main']/div[3]/div[5]/div/div/div/div/div/div/div/button","//*[@id='main']/div[3]/div[5]/div/div/div/div/div/div[2]/div/button"};
-    	for (int k = 0; k < magnum.length; k++){
-    		cardData = driver.findElement(By.xpath(magnum[k]));
+    	
+    	for (int k = 0; k < xpa.magnum.length; k++){
+    		cardData = driver.findElement(By.xpath(xpa.magnum[k]));
     		//cardData.getAttribute("data-id");
     		ReqIDs.add(cardData.getAttribute("data-id"));
     		System.out.println("\""+cardData.getAttribute("data-id")+"\",");
     	}
-    	////*[@id="main"]/div[3]/div[6]/div/div/div[4]/div/div/div[3]/div/button
+    	
     	System.out.println("SMG");
-    	String smgs [] = {
-    			"//*[@id='main']/div[3]/div[6]/div/div/div[1]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[6]/div/div/div[1]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[6]/div/div/div[1]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[6]/div/div/div[1]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[6]/div/div/div[1]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[6]/div/div/div[1]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[6]/div/div/div[2]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[6]/div/div/div[2]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[6]/div/div/div[2]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[6]/div/div/div[2]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[6]/div/div/div[2]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[6]/div/div/div[2]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[6]/div/div/div[3]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[6]/div/div/div[3]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[6]/div/div/div[3]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[6]/div/div/div[3]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[6]/div/div/div[3]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[6]/div/div/div[3]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[6]/div/div/div[4]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[6]/div/div/div[4]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[6]/div/div/div[4]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[6]/div/div/div[4]/div/div/div[4]/div/button",};
-    	for (int k = 0; k < smgs.length; k++){
-    		cardData = driver.findElement(By.xpath(smgs[k]));
+    	
+    	for (int k = 0; k < xpa.smgs.length; k++){
+    		cardData = driver.findElement(By.xpath(xpa.smgs[k]));
     		//cardData.getAttribute("data-id");
     		ReqIDs.add(cardData.getAttribute("data-id"));
     		System.out.println("\""+cardData.getAttribute("data-id")+"\",");
     	}
     	System.out.println("Armor Mods");
-    	String armorMods [] = {
-    			"//*[@id='main']/div[3]/div[7]/div/div/div[1]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[7]/div/div/div[1]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[7]/div/div/div[1]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[7]/div/div/div[1]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[7]/div/div/div[1]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[7]/div/div/div[1]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[7]/div/div/div[2]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[7]/div/div/div[2]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[7]/div/div/div[2]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[7]/div/div/div[2]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[7]/div/div/div[2]/div/div/div[5]/div/button",};
-    	for (int k = 0; k < armorMods.length; k++){
-    		cardData = driver.findElement(By.xpath(armorMods[k]));
+    	
+    	for (int k = 0; k < xpa.armorMods.length; k++){
+    		cardData = driver.findElement(By.xpath(xpa.armorMods[k]));
     		//cardData.getAttribute("data-id");
     		ReqIDs.add(cardData.getAttribute("data-id"));
     		System.out.println("\""+cardData.getAttribute("data-id")+"\",");
     	}
-    	////*[@id="main"]/div[3]/div[7]/div/div/div[2]/div/div/div[4]/div/button
+    	
     	//Boosts
-    	////*[@id="main"]/div[3]/div[1]/div/div/div[3]/div/div/div[3]/div/button
     	System.out.println("Arena Boosts");
-    	String arenaBoosts [] = {
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[1]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[1]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[1]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[1]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[1]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[1]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[2]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[2]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[2]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[2]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[2]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[2]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[3]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[3]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[1]/div/div/div[3]/div/div/div[3]/div/button",};
-    	for (int k = 0; k < arenaBoosts.length; k++){
-    		cardData = driver.findElement(By.xpath(arenaBoosts[k]));
+    	
+    	for (int k = 0; k < xpa.arenaBoosts.length; k++){
+    		cardData = driver.findElement(By.xpath(xpa.arenaBoosts[k]));
     		//cardData.getAttribute("data-id");
     		ReqIDs.add(cardData.getAttribute("data-id"));
     		System.out.println("\""+cardData.getAttribute("data-id")+"\",");
     	}
-    	////*[@id="main"]/div[3]/div[2]/div/div/div[3]/div/div/div[4]/div/button
+    	
     	System.out.println("Warzone Boosts");
-    	String warzoneBoosts [] = {
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[1]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[1]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[1]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[1]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[1]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[1]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[2]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[2]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[2]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[2]/div/div/div[4]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[2]/div/div/div[5]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[2]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[3]/div/div/div[1]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[3]/div/div/div[2]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[3]/div/div/div[3]/div/button",
-    			"//*[@id='main']/div[3]/div[2]/div/div/div[3]/div/div/div[4]/div/button",};
-    	for (int k = 0; k < warzoneBoosts.length; k++){
-    		cardData = driver.findElement(By.xpath(warzoneBoosts[k]));
+    	
+    	for (int k = 0; k < xpa.warzoneBoosts.length; k++){
+    		cardData = driver.findElement(By.xpath(xpa.warzoneBoosts[k]));
     		//cardData.getAttribute("data-id");
     		ReqIDs.add(cardData.getAttribute("data-id"));
     		System.out.println("\""+cardData.getAttribute("data-id")+"\",");
