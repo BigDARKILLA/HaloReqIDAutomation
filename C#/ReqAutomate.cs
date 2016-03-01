@@ -23,9 +23,9 @@ using System.Collections;
  * eg: <button data-id="e1047da5-2880-4071-8e8d-9fecd5cb4f3d" data-name="Beam Rifle" data-description="Long-range semi-automatic energy rifle with variable-zoom 4x/10x optics. Use Smart-Link to line up headshots for one-shot kills." data-sell-price="100" data-is-wearable="False" data-have-owned="True" data-subcategory="PowerWeapon" data-wearable-id="0" data-unused-count="0" data-is-durable="False" data-has-certification="True" data-rarity="Rare" data-rarity-type="2" data-energy-level="6" data-analytics="{pageName}:RequisitionDetail">
  *                                           <img class="have-owned" alt="Beam Rifle" src="https://image.halocdn.com/h5/requisitions/e1047da5-2880-4071-8e8d-9fecd5cb4f3d?locale=en&amp;width=200&amp;hash=dc2Rt16Lx%2bWaWxZ4sAfwyU5s1uDExOq1vDNIFuVFeMI%3d">
  *                                       </button> 
- * Description: Opens up the Chrome web browser and CMD, goes to Halo Waypoint. Prompts you to input the proper credentials. Then, it pulls Requisition API data from XPath.
+ * Description: Opens up the Chrome web browser, goes to Halo Waypoint, logs you in, pulls Requisition API data from XPath.
  * Warning: I did get a little carried away with the hard-coded arrays, which are now located in the XPathArray Class. I may remove them in a future update.
- * Future Plans: ???
+ * Future Plans: Dynamically generate the XPath strings by subtracting the remainder of (n-values % 6) from n-values and inserting the data in that many rows (with the remainder being the last row).
  * Additional Info: This software uses references to the Selenium WebDriver, Halo 5: Guardians, and HaloWaypoint.
  * For more info please visit: http://www.seleniumhq.org/ or http://www.halowaypoint.com
  * This application is offered by Requisition Automation Retrieval, which is solely responsible for its content. It is not sponsored or endorsed by Microsoft. This application uses the Halo® Game Data API.
@@ -54,23 +54,21 @@ namespace haloreqautomation
             ra.ReqIDs = new ArrayList();
             ra.automationMethod();
             Console.WriteLine(DateTime.Now.ToString());
-            Console.WriteLine("Number of entries = " + ra.ReqIDs.Count);
+            Console.WriteLine("Number of entries = " + (ra.ReqIDs.Count-19));
             ra.FileWriter();
             
         }
         //For easy manipulation, I'm throwing the data in a txt file in the bin folder.
         public void FileWriter() {
             using (System.IO.StreamWriter file =
-            new System.IO.StreamWriter(@"Where_Is_Your_Project_Bin\Halo5ReqIDs.txt"))
+            new System.IO.StreamWriter(@"C:\Users\antleg7\Documents\Visual Studio 2012\Projects\haloreqautomation\ConsoleApplication2\bin\Halo5ReqIDs.txt"))
             {
                 file.WriteLine(DateTime.Now.ToString());
                 foreach (string a in ReqIDs)
-                {
-                    // If the line doesn't contain a space, write the line to the file.
-                    if (!a.Contains(" "))
-                    {
+                {                 
+                    
                         file.WriteLine(a);
-                    }
+                    
                 }
                 Console.WriteLine("End Program");
             }
@@ -134,7 +132,7 @@ namespace haloreqautomation
                 date = new DateTime();
                 ReqIDs = new ArrayList();
 
-
+                ReqIDs.Add("Power Weapons");
                 Console.WriteLine("Power Weapons");
 
                 for (i = 0; i < xpa.powerWeapons.Length; i++)
@@ -148,8 +146,8 @@ namespace haloreqautomation
                     Console.WriteLine("\"" + cardData.GetAttribute("data-id") + "\",");
 
                 }
-            
 
+                ReqIDs.Add("Vehicles");
             Console.WriteLine("Vehicles");
     	
     	for (int j = 0; j < xpa.vehicles.Length; j++){
@@ -158,7 +156,7 @@ namespace haloreqautomation
     		ReqIDs.Add(cardData.GetAttribute("data-id"));
     		Console.WriteLine("\""+cardData.GetAttribute("data-id")+"\",");
     	}
-    	
+        ReqIDs.Add("Powerups");
     	Console.WriteLine("Powerups");
     	
     	for (int k = 0; k < xpa.powerups.Length; k++){
@@ -170,7 +168,8 @@ namespace haloreqautomation
     	
     	//Customization
         driver.Navigate().GoToUrl("https://www.halowaypoint.com/en-us/games/halo-5-guardians/xbox-one/requisitions/categories/customization?ownedOnly=False");
-    	Console.WriteLine("Helmets");
+        ReqIDs.Add("Helmets");    	
+            Console.WriteLine("Helmets");
     
     	for (int k = 0; k < xpa.helmets.Length; k++){
     		cardData = driver.FindElement(By.XPath(xpa.helmets[k]));
@@ -178,7 +177,7 @@ namespace haloreqautomation
     		ReqIDs.Add(cardData.GetAttribute("data-id"));
     		Console.WriteLine("\""+cardData.GetAttribute("data-id")+"\",");
     	}
-    	
+        ReqIDs.Add("Armor");
     	Console.WriteLine("Armor");
     	
     	for (int k = 0; k < xpa.armor.Length; k++){
@@ -187,7 +186,7 @@ namespace haloreqautomation
     		ReqIDs.Add(cardData.GetAttribute("data-id"));
     		Console.WriteLine("\""+cardData.GetAttribute("data-id")+"\",");
     	}
-    	
+        ReqIDs.Add("Visors");
     	Console.WriteLine("Visors");
     	
     	for (int k = 0; k < xpa.visors.Length; k++){
@@ -196,7 +195,7 @@ namespace haloreqautomation
     		ReqIDs.Add(cardData.GetAttribute("data-id"));
     		Console.WriteLine("\""+cardData.GetAttribute("data-id")+"\",");
     	}
-    	
+        ReqIDs.Add("Emblems");
     	Console.WriteLine("Emblems");
     	
     	for (int k = 0; k < xpa.emblems.Length; k++){
@@ -205,7 +204,7 @@ namespace haloreqautomation
     		ReqIDs.Add(cardData.GetAttribute("data-id"));
     		Console.WriteLine("\""+cardData.GetAttribute("data-id")+"\",");
     	}
-    	
+        ReqIDs.Add("Stance");
     	Console.WriteLine("Stance");
     	
     	for (int k = 0; k < xpa.stances.Length; k++){
@@ -214,7 +213,7 @@ namespace haloreqautomation
     		ReqIDs.Add(cardData.GetAttribute("data-id"));
     		Console.WriteLine("\""+cardData.GetAttribute("data-id")+"\",");
     	}
-    	
+        ReqIDs.Add("Assassination");
     	Console.WriteLine("Assassination");
     	
     	for (int k = 0; k < xpa.assassinations.Length; k++){
@@ -223,7 +222,7 @@ namespace haloreqautomation
     		ReqIDs.Add(cardData.GetAttribute("data-id"));
     		Console.WriteLine("\""+cardData.GetAttribute("data-id")+"\",");
     	}
-    	
+        ReqIDs.Add("Weapon Skin");
     	Console.WriteLine("Weapon Skin");
     	
     	for (int k = 0; k < xpa.weaponSkins.Length; k++){
@@ -234,7 +233,7 @@ namespace haloreqautomation
     	}
     	//LoadOut
     	driver.Navigate().GoToUrl("https://www.halowaypoint.com/en-us/games/halo-5-guardians/xbox-one/requisitions/categories/loadout?ownedOnly=False");
-    	
+        ReqIDs.Add("Assault Rifles");
     	Console.WriteLine("Assault Rifles");
     	
     	for (int k = 0; k < xpa.assaultRifles.Length; k++){
@@ -243,7 +242,7 @@ namespace haloreqautomation
     		ReqIDs.Add(cardData.GetAttribute("data-id"));
     		Console.WriteLine("\""+cardData.GetAttribute("data-id")+"\",");
     	}
-    	
+        ReqIDs.Add("Battle Rifles");
     	Console.WriteLine("Battle Rifles");
     	
     	for (int k = 0; k < xpa.battleRifles.Length; k++){
@@ -252,7 +251,7 @@ namespace haloreqautomation
     		ReqIDs.Add(cardData.GetAttribute("data-id"));
     		Console.WriteLine("\""+cardData.GetAttribute("data-id")+"\",");
     	}
-    	
+        ReqIDs.Add("DMR");
     	Console.WriteLine("DMR");
     	
     	for (int k = 0; k < xpa.dmrs.Length; k++){
@@ -261,7 +260,7 @@ namespace haloreqautomation
     		ReqIDs.Add(cardData.GetAttribute("data-id"));
     		Console.WriteLine("\""+cardData.GetAttribute("data-id")+"\",");
     	}
-    	
+        ReqIDs.Add("Halo 2 Battle Rifle");
     	Console.WriteLine("Halo 2 Battle Rifle");
     	
     	for (int k = 0; k < xpa.h2br.Length; k++){
@@ -270,7 +269,7 @@ namespace haloreqautomation
     		ReqIDs.Add(cardData.GetAttribute("data-id"));
     		Console.WriteLine("\""+cardData.GetAttribute("data-id")+"\",");
     	}
-    	
+        ReqIDs.Add("Magnum");
     	Console.WriteLine("Magnum");
     	
     	for (int k = 0; k < xpa.magnum.Length; k++){
@@ -279,7 +278,7 @@ namespace haloreqautomation
     		ReqIDs.Add(cardData.GetAttribute("data-id"));
     		Console.WriteLine("\""+cardData.GetAttribute("data-id")+"\",");
     	}
-    	
+        ReqIDs.Add("SMG");
     	Console.WriteLine("SMG");
     	
     	for (int k = 0; k < xpa.smgs.Length; k++){
@@ -288,6 +287,7 @@ namespace haloreqautomation
     		ReqIDs.Add(cardData.GetAttribute("data-id"));
     		Console.WriteLine("\""+cardData.GetAttribute("data-id")+"\",");
     	}
+        ReqIDs.Add("Armor Mods");
     	Console.WriteLine("Armor Mods");
     	
     	for (int k = 0; k < xpa.armorMods.Length; k++){
@@ -298,6 +298,7 @@ namespace haloreqautomation
     	}
     	
     	//Boosts
+        ReqIDs.Add("Arena Boosts");
     	Console.WriteLine("Arena Boosts");
     	
     	for (int k = 0; k < xpa.arenaBoosts.Length; k++){
@@ -306,7 +307,7 @@ namespace haloreqautomation
     		ReqIDs.Add(cardData.GetAttribute("data-id"));
     		Console.WriteLine("\""+cardData.GetAttribute("data-id")+"\",");
     	}
-    	
+        ReqIDs.Add("Warzone Boosts");
     	Console.WriteLine("Warzone Boosts");
     	
     	for (int k = 0; k < xpa.warzoneBoosts.Length; k++){

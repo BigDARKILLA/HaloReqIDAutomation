@@ -6,6 +6,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
+
+import java.io.*;
 import java.util.*;
 
 
@@ -92,26 +94,27 @@ import java.util.*;
 
 public class ReqAutomate {
 	int i;
-	String actualTitle, expectedTitle, actualTitle2, expectedTitle2, value;
+	
 	WebDriver driver;
 	WebElement searchBox, myDynamicElement, searchBox2, searchBox3, button, cardData;
 	List<WebElement> findEl;
 	Date date;
 	ArrayList <String> ReqIDs;
 	XPathArray xpa;
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
     	ReqAutomate ra = new ReqAutomate();
     	 
     	ra.automationMethod();
-    	System.out.println("Number of entries = "+ ra.ReqIDs.size());
+    	ra.fileWriter();
+    	System.out.println("Number of entries = "+ (ra.ReqIDs.size()-19));
     	System.out.println("The program has ended");
     	
     }
     
     
     public void automationMethod(){
-    	
-    	System.setProperty("webdriver.chrome.driver", "Where_Did_You_Save/chromedriver.exe");
+    	try{
+    	System.setProperty("webdriver.chrome.driver", "Where_did_you_save/chromedriver.exe");
     	xpa = new XPathArray();
     	DesiredCapabilities capabilities = DesiredCapabilities.chrome();
     	ChromeOptions options = new ChromeOptions();
@@ -133,7 +136,7 @@ public class ReqAutomate {
     	date = new Date();
     	//Output begins here
     	System.out.println(date.toString());
-    	
+    	ReqIDs.add("Power Weapons");
     	System.out.println("Power Weapons");
     	
     	for (int i = 0; i < xpa.powerWeapons.length; i++){
@@ -145,7 +148,7 @@ public class ReqAutomate {
     		ReqIDs.add(cardData.getAttribute("data-id"));
     		System.out.println("\""+cardData.getAttribute("data-id")+"\",");
     	}
-    	
+    	ReqIDs.add("Vehicles");
     	System.out.println("Vehicles");
     	
     	for (int j = 0; j < xpa.vehicles.length; j++){
@@ -156,6 +159,7 @@ public class ReqAutomate {
     	}
     	//driver.get("");
     	//<div class ="card"><button data-id="retrieve this value">
+    	ReqIDs.add("Powerups");
     	System.out.println("Powerups");
     	
     	for (int k = 0; k < xpa.powerups.length; k++){
@@ -167,15 +171,16 @@ public class ReqAutomate {
     	
     	//Customization
     	driver.get("https://www.halowaypoint.com/en-us/games/halo-5-guardians/xbox-one/requisitions/categories/customization?ownedOnly=False");
+    	ReqIDs.add("Helmets");
     	System.out.println("Helmets");
-    
+    	
     	for (int k = 0; k < xpa.helmets.length; k++){
     		cardData = driver.findElement(By.xpath(xpa.helmets[k]));
     		//cardData.getAttribute("data-id");
     		ReqIDs.add(cardData.getAttribute("data-id"));
     		System.out.println("\""+cardData.getAttribute("data-id")+"\",");
     	}
-    	
+    	ReqIDs.add("Armor");
     	System.out.println("Armor");
     	
     	for (int k = 0; k < xpa.armor.length; k++){
@@ -184,7 +189,7 @@ public class ReqAutomate {
     		ReqIDs.add(cardData.getAttribute("data-id"));
     		System.out.println("\""+cardData.getAttribute("data-id")+"\",");
     	}
-    	
+    	ReqIDs.add("Visors");
     	System.out.println("Visors");
     	
     	for (int k = 0; k < xpa.visors.length; k++){
@@ -193,7 +198,7 @@ public class ReqAutomate {
     		ReqIDs.add(cardData.getAttribute("data-id"));
     		System.out.println("\""+cardData.getAttribute("data-id")+"\",");
     	}
-    	
+    	ReqIDs.add("Emblems");
     	System.out.println("Emblems");
     	
     	for (int k = 0; k < xpa.emblems.length; k++){
@@ -202,7 +207,7 @@ public class ReqAutomate {
     		ReqIDs.add(cardData.getAttribute("data-id"));
     		System.out.println("\""+cardData.getAttribute("data-id")+"\",");
     	}
-    	
+    	ReqIDs.add("Stance");
     	System.out.println("Stance");
     	
     	for (int k = 0; k < xpa.stances.length; k++){
@@ -211,7 +216,7 @@ public class ReqAutomate {
     		ReqIDs.add(cardData.getAttribute("data-id"));
     		System.out.println("\""+cardData.getAttribute("data-id")+"\",");
     	}
-    	
+    	ReqIDs.add("Assassination");
     	System.out.println("Assassination");
     	
     	for (int k = 0; k < xpa.assassinations.length; k++){
@@ -220,7 +225,7 @@ public class ReqAutomate {
     		ReqIDs.add(cardData.getAttribute("data-id"));
     		System.out.println("\""+cardData.getAttribute("data-id")+"\",");
     	}
-    	
+    	ReqIDs.add("Weapon Skin");
     	System.out.println("Weapon Skin");
     	
     	for (int k = 0; k < xpa.weaponSkins.length; k++){
@@ -231,7 +236,7 @@ public class ReqAutomate {
     	}
     	//LoadOut
     	driver.get("https://www.halowaypoint.com/en-us/games/halo-5-guardians/xbox-one/requisitions/categories/loadout?ownedOnly=False");
-    	
+    	ReqIDs.add("Assault Rifles");
     	System.out.println("Assault Rifles");
     	
     	for (int k = 0; k < xpa.assaultRifles.length; k++){
@@ -240,7 +245,7 @@ public class ReqAutomate {
     		ReqIDs.add(cardData.getAttribute("data-id"));
     		System.out.println("\""+cardData.getAttribute("data-id")+"\",");
     	}
-    	
+    	ReqIDs.add("Battle Rifles");
     	System.out.println("Battle Rifles");
     	
     	for (int k = 0; k < xpa.battleRifles.length; k++){
@@ -249,7 +254,7 @@ public class ReqAutomate {
     		ReqIDs.add(cardData.getAttribute("data-id"));
     		System.out.println("\""+cardData.getAttribute("data-id")+"\",");
     	}
-    	
+    	ReqIDs.add("DMR");
     	System.out.println("DMR");
     	
     	for (int k = 0; k < xpa.dmrs.length; k++){
@@ -258,7 +263,7 @@ public class ReqAutomate {
     		ReqIDs.add(cardData.getAttribute("data-id"));
     		System.out.println("\""+cardData.getAttribute("data-id")+"\",");
     	}
-    	
+    	ReqIDs.add("Halo 2 Battle Rifle");
     	System.out.println("Halo 2 Battle Rifle");
     	
     	for (int k = 0; k < xpa.h2br.length; k++){
@@ -267,7 +272,7 @@ public class ReqAutomate {
     		ReqIDs.add(cardData.getAttribute("data-id"));
     		System.out.println("\""+cardData.getAttribute("data-id")+"\",");
     	}
-    	
+    	ReqIDs.add("Magnum");
     	System.out.println("Magnum");
     	
     	for (int k = 0; k < xpa.magnum.length; k++){
@@ -276,7 +281,7 @@ public class ReqAutomate {
     		ReqIDs.add(cardData.getAttribute("data-id"));
     		System.out.println("\""+cardData.getAttribute("data-id")+"\",");
     	}
-    	
+    	ReqIDs.add("SMG");
     	System.out.println("SMG");
     	
     	for (int k = 0; k < xpa.smgs.length; k++){
@@ -285,6 +290,7 @@ public class ReqAutomate {
     		ReqIDs.add(cardData.getAttribute("data-id"));
     		System.out.println("\""+cardData.getAttribute("data-id")+"\",");
     	}
+    	ReqIDs.add("Armor Mods");
     	System.out.println("Armor Mods");
     	
     	for (int k = 0; k < xpa.armorMods.length; k++){
@@ -295,6 +301,7 @@ public class ReqAutomate {
     	}
     	
     	//Boosts
+    	ReqIDs.add("Arena Boosts");
     	System.out.println("Arena Boosts");
     	
     	for (int k = 0; k < xpa.arenaBoosts.length; k++){
@@ -303,7 +310,7 @@ public class ReqAutomate {
     		ReqIDs.add(cardData.getAttribute("data-id"));
     		System.out.println("\""+cardData.getAttribute("data-id")+"\",");
     	}
-    	
+    	ReqIDs.add("Warzone Boosts");
     	System.out.println("Warzone Boosts");
     	
     	for (int k = 0; k < xpa.warzoneBoosts.length; k++){
@@ -312,7 +319,23 @@ public class ReqAutomate {
     		ReqIDs.add(cardData.getAttribute("data-id"));
     		System.out.println("\""+cardData.getAttribute("data-id")+"\",");
     	}
-    	
+    	}catch(NoSuchElementException e){
+    		e.printStackTrace();
+    	}
+    
 }
+    public void fileWriter() throws IOException{
+    	File file = new File("Halo5Reqs.txt");
+    	file.createNewFile();
+    	PrintStream writer = new PrintStream(file);
+    	writer.println(date.toString());
+    	for (String a : ReqIDs){
+    		writer.println(a);
+    		
+    	}
+    	writer.flush();
+    	writer.close();
+    }
+    
 }
 

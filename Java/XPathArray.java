@@ -1156,7 +1156,8 @@ public class XPathArray extends ReqAutomate{
     			"//*[@id='main']/div[3]/div[6]/div/div/div[4]/div/div/div[2]/div/button",
     			"//*[@id='main']/div[3]/div[6]/div/div/div[4]/div/div/div[3]/div/button",
     			"//*[@id='main']/div[3]/div[6]/div/div/div[4]/div/div/div[4]/div/button",};
-    	
+    	//SMG Disappeared for a second.
+    	////*[@id="main"]/div[3]/div[6]/div/div/div[4]/div/div/div[4]/div/button/img
     	String armorMods [] = {
     			"//*[@id='main']/div[3]/div[7]/div/div/div[1]/div/div/div[1]/div/button",
     			"//*[@id='main']/div[3]/div[7]/div/div/div[1]/div/div/div[2]/div/button",
