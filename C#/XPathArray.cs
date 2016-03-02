@@ -913,7 +913,8 @@ namespace haloreqautomation
     			"//*[@id='main']/div[3]/div[4]/div/div/div[44]/div/div/div[4]/div/button",
     			"//*[@id='main']/div[3]/div[4]/div/div/div[44]/div/div/div[5]/div/button",
     			"//*[@id='main']/div[3]/div[4]/div/div/div[44]/div/div/div[6]/div/button",
-    			"//*[@id='main']/div[3]/div[4]/div/div/div[45]/div/div/div[1]/div/button",};
+    			"//*[@id='main']/div[3]/div[4]/div/div/div[45]/div/div/div[1]/div/button",
+                "//*[@id='main']/div[3]/div[4]/div/div/div[45]/div/div/div[2]/div/button",};
     	
     	public String [] stances  = {
     			"//*[@id='main']/div[3]/div[5]/div/div/div[1]/div/div/div[1]/div/button",
